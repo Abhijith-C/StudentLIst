@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:student_list/AddStudent.dart';
 import 'package:student_list/StudentInfo.dart';
@@ -38,9 +40,16 @@ class HomePage extends StatelessWidget {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (ctx) => StudentInfo(name: data.name))),
+                            builder: (ctx) => StudentInfo(
+                                  name: data.name,
+                                  age: data.age,
+                                  clas: data.clas,
+                                  address: data.address,
+                                  image: data.image,
+                                ))),
                     title: Text(data.name),
                     leading: CircleAvatar(
+                      backgroundImage: Image.file(File(data.image)).image,
                       radius: 60,
                     ),
                   );

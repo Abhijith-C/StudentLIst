@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:student_list/db/StudentModel.dart';
 import 'package:student_list/db/database/database.dart';
 
@@ -7,6 +11,7 @@ class AddStudent extends StatelessWidget {
   final _ageController = TextEditingController();
   final _classController = TextEditingController();
   final _addressController = TextEditingController();
+  late final image;
   AddStudent({Key? key}) : super(key: key);
 
   @override
@@ -58,7 +63,9 @@ class AddStudent extends StatelessWidget {
                   SizedBox(
                     width: 100,
                     child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          imagePick();
+                        },
                         child: Row(
                           children: [Icon(Icons.image), Text('Image')],
                         )),
@@ -90,9 +97,23 @@ class AddStudent extends StatelessWidget {
       return;
       // } else {
       //   print('success');
+    } else {
+      final stdObj = StudentModel(
+          name: name, age: age, clas: clas, address: address, image: image);
+      addStudent(stdObj);
     }
-    final stdObj =
-        StudentModel(name: name, age: age, clas: clas, address: address);
-    addStudent(stdObj);
+  }
+
+  Future<void> imagePick() async {
+    try {
+      final img = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (img == null) {
+        return;
+      }
+      this.image = img.path;
+    } on PlatformException catch (e) {
+      print('Failed to pick image : $e');
+    }
+    print('path is $image');
   }
 }
