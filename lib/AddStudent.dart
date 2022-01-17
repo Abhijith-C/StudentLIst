@@ -64,7 +64,7 @@ class AddStudent extends StatelessWidget {
                     width: 100,
                     child: ElevatedButton(
                         onPressed: () {
-                          imagePick();
+                          simpleDialog(context);
                         },
                         child: Row(
                           children: [Icon(Icons.image), Text('Image')],
@@ -88,6 +88,56 @@ class AddStudent extends StatelessWidget {
         ));
   }
 
+  Future<void> imagePickFromGallery() async {
+    try {
+      final img = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (img == null) {
+        return;
+      }
+      this.image = img.path;
+    } on PlatformException catch (e) {
+      print('Failed to pick image : $e');
+    }
+    print('path is $image');
+  }
+
+  Future<void> imagePickFromCamera() async {
+    try {
+      final img = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (img == null) {
+        return;
+      }
+      this.image = img.path;
+    } on PlatformException catch (e) {
+      print('Failed to pick image : $e');
+    }
+    print('path is $image');
+  }
+
+  void simpleDialog(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        builder: (ctx) => SimpleDialog(
+              title: Text('choose'),
+              children: [
+                SimpleDialogOption(
+                  onPressed: () {
+                    imagePickFromGallery();
+                    Navigator.pop(ctx);
+                  },
+                  child: Text('Gallery'),
+                ),
+                SimpleDialogOption(
+                  onPressed: () {
+                    imagePickFromCamera();
+                    Navigator.pop(ctx);
+                  },
+                  child: Text('Camera'),
+                )
+              ],
+            ));
+  }
+
   void addStudentToList() {
     final name = _nameController.text.trim();
     final age = _ageController.text.trim();
@@ -102,18 +152,5 @@ class AddStudent extends StatelessWidget {
           name: name, age: age, clas: clas, address: address, image: image);
       addStudent(stdObj);
     }
-  }
-
-  Future<void> imagePick() async {
-    try {
-      final img = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (img == null) {
-        return;
-      }
-      this.image = img.path;
-    } on PlatformException catch (e) {
-      print('Failed to pick image : $e');
-    }
-    print('path is $image');
   }
 }

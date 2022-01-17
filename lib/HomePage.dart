@@ -14,50 +14,77 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Container(
-        decoration: BoxDecoration(
-            color: Colors.blue[100], borderRadius: BorderRadius.circular(30)),
-        child: TextFormField(
-          onChanged: (value) {
-            print(value);
-          },
-          controller: _searchController,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(15), hintText: 'Search'),
-        ),
-      )),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: ValueListenableBuilder(
-          valueListenable: studentList,
-          builder: (BuildContext ctx, List<StudentModel> newStudentList,
-              Widget? child) {
-            return ListView.separated(
-                itemBuilder: (ctx, index) {
-                  final data = newStudentList[index];
-                  return ListTile(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => StudentInfo(
-                                  name: data.name,
-                                  age: data.age,
-                                  clas: data.clas,
-                                  address: data.address,
-                                  image: data.image,
-                                ))),
-                    title: Text(data.name),
-                    leading: CircleAvatar(
-                      backgroundImage: Image.file(File(data.image)).image,
-                      radius: 60,
-                    ),
-                  );
+      appBar: AppBar(title: Text('Home Page')),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(30),
+            child: TextFormField(
+              controller: _searchController,
+              onChanged: (value) {
+                search(value);
+              },
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), hintText: 'search...'),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              child: ValueListenableBuilder(
+                valueListenable: studentList,
+                builder: (BuildContext ctx, List<StudentModel> newStudentList,
+                    Widget? child) {
+                  return ListView.separated(
+                      itemBuilder: (ctx, index) {
+                        final data = newStudentList[index];
+                        return ListTile(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => StudentInfo(
+                                        name: data.name,
+                                        age: data.age,
+                                        clas: data.clas,
+                                        address: data.address,
+                                        image: data.image,
+                                      ))),
+                          title: Text(data.name),
+                          leading: CircleAvatar(
+                            backgroundImage: Image.file(File(data.image)).image,
+                            radius: 50,
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Colors.blue,
+                                  )),
+                              IconButton(
+                                  onPressed: () {
+                                    if (data.id != null)
+                                      deleteStudent(data.id!);
+                                    else
+                                      print('id is null');
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  )),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (ctx, index) => Divider(),
+                      itemCount: newStudentList.length);
                 },
-                separatorBuilder: (ctx, index) => Divider(),
-                itemCount: newStudentList.length);
-          },
-        ),
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -68,4 +95,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  void search(value) {}
 }
