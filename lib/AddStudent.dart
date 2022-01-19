@@ -12,7 +12,7 @@ class AddStudent extends StatelessWidget {
   final _ageController = TextEditingController();
   final _classController = TextEditingController();
   final _addressController = TextEditingController();
-  late final _image;
+  dynamic _image;
   StudentModel? data;
   AddStudent({Key? key, this.data}) : super(key: key);
 
@@ -23,7 +23,7 @@ class AddStudent extends StatelessWidget {
       _ageController.text = data!.age;
       _classController.text = data!.clas;
       _addressController.text = data!.address;
-      //_image = data!.image;
+      _image = data!.image;
     }
     return Scaffold(
         appBar: AppBar(
