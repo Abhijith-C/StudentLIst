@@ -9,6 +9,7 @@ import 'db/StudentModel.dart';
 
 class HomePage extends StatelessWidget {
   final _searchController = TextEditingController();
+  //StudentModel? data1;
   HomePage({Key? key}) : super(key: key);
 
   @override
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
                   return ListView.separated(
                       itemBuilder: (ctx, index) {
                         final data = newStudentList[index];
+                        //this.data1 = data;
                         return ListTile(
                           onTap: () => Navigator.push(
                               context,
@@ -58,7 +60,13 @@ class HomePage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (ctx) => AddStudent(
+                                                  data: data,
+                                                )));
+                                  },
                                   icon: Icon(
                                     Icons.edit,
                                     color: Colors.blue,
@@ -89,7 +97,11 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (ctx) => AddStudent()));
+              context,
+              MaterialPageRoute(
+                  builder: (ctx) => AddStudent(
+                        //data: data1,
+                      )));
         },
         child: Icon(Icons.add),
       ),
