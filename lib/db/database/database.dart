@@ -13,6 +13,7 @@ Future<void> addStudent(StudentModel value) async {
   studentList.value.add(value);
 
   studentList.notifyListeners();
+  value.save();
 }
 
 Future<void> getStudentList() async {

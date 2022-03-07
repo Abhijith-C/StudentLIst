@@ -2,8 +2,7 @@ import 'package:hive_flutter/adapters.dart';
 part 'StudentModel.g.dart';
 
 @HiveType(typeId: 1)
-class StudentModel {
-
+class StudentModel extends HiveObject {
   @HiveField(0)
   int? id;
 
@@ -21,7 +20,6 @@ class StudentModel {
 
   @HiveField(5)
   final String image;
-  
 
   StudentModel(
       {required this.name,
