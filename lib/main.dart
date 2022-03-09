@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:student_list/HomePage.dart';
 import 'package:student_list/db/StudentModel.dart';
@@ -15,12 +16,14 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+final c = Get.put(C());
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    getStudentList();
+    c.getStudentList();
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blue),
       home: HomePage(),

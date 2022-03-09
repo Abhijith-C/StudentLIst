@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:student_list/HomePage.dart';
 import 'package:student_list/db/StudentModel.dart';
 import 'package:student_list/db/database/database.dart';
 
 class AddStudent extends StatelessWidget {
+  final c = Get.put(C());
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _classController = TextEditingController();
@@ -84,9 +85,9 @@ class AddStudent extends StatelessWidget {
                     child: ElevatedButton(
                         onPressed: () {
                           if (data == null)
-                            addStudentToList();
+                            addStudentToList(context);
                           else
-                            updateStudentToList(data!.id!);
+                            updateStudentToList(data!.id!, context);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +151,7 @@ class AddStudent extends StatelessWidget {
             ));
   }
 
-  void addStudentToList() {
+  void addStudentToList(BuildContext context) {
     final name = _nameController.text.trim();
     final age = _ageController.text.trim();
     final clas = _classController.text.trim();
@@ -167,11 +168,14 @@ class AddStudent extends StatelessWidget {
     } else {
       final stdObj = StudentModel(
           name: name, age: age, clas: clas, address: address, image: image);
-      addStudent(stdObj);
+      c.addStudent(stdObj);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),((route) => false));
     }
   }
 
-  void updateStudentToList(int id) {
+  void updateStudentToList(int id, BuildContext context) {
     final name = _nameController.text;
     final age = _ageController.text;
     final clas = _classController.text;
@@ -184,7 +188,10 @@ class AddStudent extends StatelessWidget {
         address: address,
         image: image,
         id: id);
-    updateStudent(id, stdObj);
-    print('111111111111111111111111......................$_image');
+    c.updateStudent(id, stdObj);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),((route) => false));
+    // print('111111111111111111111111......................$_image');
   }
 }
